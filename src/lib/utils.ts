@@ -57,5 +57,9 @@ export function maangBadgeClass(tag: MaangTag): string {
 }
 
 export function formatJson(value: unknown): string {
-  return JSON.stringify(value, null, 2);
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch {
+    return "[unable to display value]";
+  }
 }
