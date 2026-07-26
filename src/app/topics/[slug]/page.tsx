@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { TopicProblemList } from "@/components/TopicProblemList";
 import type { ProgressStatus } from "@/content/types";
-import { getProblemsForTopic, getTopicBySlug } from "@/content";
+import { getProblemsForTopic, getTopicBySlug, topics } from "@/content";
 import { auth } from "@/lib/auth";
 import { buildProgressMap, getUserProgress } from "@/lib/progress";
 
@@ -49,9 +49,5 @@ export default async function TopicPage({ params }: TopicPageProps) {
 }
 
 export async function generateStaticParams() {
-  return [
-    { slug: "arrays" },
-    { slug: "two-pointers" },
-    { slug: "sliding-window" },
-  ];
+  return topics.map((topic) => ({ slug: topic.slug }));
 }
