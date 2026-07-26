@@ -52,6 +52,23 @@ export const topics: Topic[] = [
       "sliding-window-maximum",
     ],
   },
+  {
+    slug: "linked-lists",
+    title: "Linked Lists",
+    track: "foundation",
+    order: 4,
+    description:
+      "Pointer manipulation on singly-linked structures: traversal, in-place reversal, fast/slow pointers, and dummy-node tricks.",
+    whyItMatters:
+      "Linked lists are the first data structure where getting pointers wrong crashes your program instead of just giving a wrong answer. MAANG interviewers use them to check discipline under a structure with no random access.",
+    problemSlugs: [
+      "reverse-linked-list",
+      "merge-two-sorted-lists",
+      "linked-list-cycle",
+      "remove-nth-node-from-end-of-list",
+      "merge-k-sorted-lists",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
