@@ -4,10 +4,12 @@ export type ProgressStatus = "unsolved" | "attempted" | "solved";
 export type MaangTag = "Google" | "Amazon" | "Apple" | "Netflix" | "Meta";
 
 export interface TestCase {
-  input: unknown[];
+  input?: unknown[];
   expected: unknown;
   label?: string;
   resultType?: "list";
+  operations?: string[];
+  args?: unknown[][];
 }
 
 export interface Problem {

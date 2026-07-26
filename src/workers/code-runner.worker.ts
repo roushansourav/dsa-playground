@@ -1,10 +1,12 @@
 /// <reference lib="webworker" />
 
 interface WorkerTestCase {
-  input: unknown[];
+  input?: unknown[];
   expected: unknown;
   label?: string;
   resultType?: "list";
+  operations?: string[];
+  args?: unknown[][];
 }
 
 interface WorkerPayload {
@@ -214,11 +216,34 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
       let actual: unknown;
 
       try {
-        const hydratedInput = testCase.input.map(hydrate);
-        actual = fn(...hydratedInput);
+        if (testCase.operations) {
+          const ops = testCase.operations;
+          const argsList = testCase.args ?? [];
+          const outputs: unknown[] = [];
+          let instance: unknown;
 
-        if (testCase.resultType === "list") {
-          actual = listToArray(actual);
+          ops.forEach((op, opIndex) => {
+            const callArgs = (argsList[opIndex] ?? []).map(hydrate);
+            if (opIndex === 0) {
+              instance = new (fn as unknown as new (...ctorArgs: unknown[]) => unknown)(
+                ...callArgs,
+              );
+              outputs.push(null);
+            } else {
+              const method = (instance as Record<string, (...methodArgs: unknown[]) => unknown>)[op];
+              const result = method.apply(instance, callArgs);
+              outputs.push(result === undefined ? null : result);
+            }
+          });
+
+          actual = outputs;
+        } else {
+          const hydratedInput = (testCase.input ?? []).map(hydrate);
+          actual = fn(...hydratedInput);
+
+          if (testCase.resultType === "list") {
+            actual = listToArray(actual);
+          }
         }
 
         const passed = deepEqual(actual, testCase.expected);

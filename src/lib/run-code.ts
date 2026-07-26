@@ -1,11 +1,11 @@
-import type { RunResult } from "@/content/types";
+import type { RunResult, TestCase } from "@/content/types";
 
 const RUN_TIMEOUT_MS = 3000;
 
 export async function runCodeInWorker(
   code: string,
   functionName: string,
-  testCases: { input: unknown[]; expected: unknown; label?: string }[],
+  testCases: TestCase[],
 ): Promise<RunResult> {
   return new Promise((resolve) => {
     const worker = new Worker(
