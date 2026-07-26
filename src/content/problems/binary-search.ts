@@ -98,6 +98,28 @@ function searchMatrix(matrix, target) {
         expected: false,
       },
       { input: [[[1]], 1], expected: true },
+      {
+        input: [
+          [
+            [1, 3, 5, 7],
+            [10, 11, 16, 20],
+            [23, 30, 34, 60],
+          ],
+          16,
+        ],
+        expected: true,
+      },
+      {
+        input: [
+          [
+            [1, 3, 5, 7],
+            [10, 11, 16, 20],
+            [23, 30, 34, 60],
+          ],
+          0,
+        ],
+        expected: false,
+      },
     ],
   },
   {
@@ -176,6 +198,7 @@ function search(nums, target) {
       { input: [[4, 5, 6, 7, 0, 1, 2], 0], expected: 4 },
       { input: [[4, 5, 6, 7, 0, 1, 2], 3], expected: -1 },
       { input: [[1], 0], expected: -1 },
+      { input: [[4, 5, 6, 7, 0, 1, 2], 5], expected: 1 },
     ],
   },
   {
@@ -214,6 +237,7 @@ function findMin(nums) {
       { input: [[3, 4, 5, 1, 2]], expected: 1 },
       { input: [[4, 5, 6, 7, 0, 1, 2]], expected: 0 },
       { input: [[11, 13, 15, 17]], expected: 11 },
+      { input: [[1]], expected: 1 },
     ],
   },
   {
@@ -286,6 +310,18 @@ Because \`set\` timestamps arrive strictly increasing per key, each key's stored
           ["foo", 5],
         ],
         expected: [null, null, "bar", "bar", null, "bar2", "bar2"],
+      },
+      {
+        operations: ["TimeMap", "set", "set", "get", "get", "get"],
+        args: [
+          [],
+          ["foo", "bar", 1],
+          ["foo", "bar2", 4],
+          ["foo", 3],
+          ["foo", 5],
+          ["baz", 1],
+        ],
+        expected: [null, null, null, "bar", "bar2", ""],
       },
     ],
   },
