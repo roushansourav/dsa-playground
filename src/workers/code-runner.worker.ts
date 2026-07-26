@@ -89,14 +89,27 @@ function buildCycleList(values: number[], pos: number): RawListNode | null {
 }
 
 function listToArray(node: unknown): number[] {
+  // `null` is the documented convention for an empty list and must dehydrate
+  // to []. `undefined` (e.g. a student's function falling off the end
+  // without a `return`) is not a valid list and must NOT be silently
+  // coerced to [] — that would make a buggy solution falsely pass any test
+  // case whose expected result is an empty list. Throw instead so the
+  // caller's try/catch reports this as a failure with the real return value.
+  if (node === undefined) {
+    throw new Error(
+      "Expected a linked list or null for an empty list, but got undefined.",
+    );
+  }
+
   const values: number[] = [];
   const seen = new Set<unknown>();
   let current = node as RawListNode | null;
-  while (
-    current &&
-    typeof current === "object" &&
-    "val" in current
-  ) {
+  while (current != null) {
+    if (typeof current !== "object" || !("val" in current)) {
+      throw new Error(
+        `Expected a linked list node ({ val, next }), but got ${JSON.stringify(current)}.`,
+      );
+    }
     if (seen.has(current)) break;
     seen.add(current);
     values.push(current.val);
@@ -186,10 +199,12 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
 
     const results: WorkerTestResult[] = testCases.map((testCase, index) => {
       const label = testCase.label ?? `Test case ${index + 1}`;
+      let rawActual: unknown;
 
       try {
         const hydratedInput = testCase.input.map(hydrate);
-        let actual: unknown = fn(...hydratedInput);
+        rawActual = fn(...hydratedInput);
+        let actual: unknown = rawActual;
 
         if (testCase.resultType === "list") {
           actual = listToArray(actual);
@@ -208,7 +223,7 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
           label,
           passed: false,
           expected: testCase.expected,
-          actual: undefined,
+          actual: rawActual,
           error: error instanceof Error ? error.message : String(error),
         };
       }
