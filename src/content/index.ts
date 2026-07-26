@@ -1,4 +1,5 @@
 import { arrayProblems } from "./problems/arrays";
+import { binarySearchProblems } from "./problems/binary-search";
 import { linkedListProblems } from "./problems/linked-lists";
 import { slidingWindowProblems } from "./problems/sliding-window";
 import { stackProblems } from "./problems/stack";
@@ -15,6 +16,7 @@ const allProblems: Problem[] = [
   ...slidingWindowProblems,
   ...linkedListProblems,
   ...stackProblems,
+  ...binarySearchProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));
