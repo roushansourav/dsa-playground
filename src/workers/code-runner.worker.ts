@@ -89,19 +89,39 @@ function buildCycleList(values: number[], pos: number): RawListNode | null {
 }
 
 function listToArray(node: unknown): number[] {
+  // `null` is a legitimate empty list and dehydrates to `[]`.
+  if (node === null) {
+    return [];
+  }
+
   const values: number[] = [];
   const seen = new Set<unknown>();
-  let current = node as RawListNode | null;
-  while (
-    current &&
-    typeof current === "object" &&
-    "val" in current
-  ) {
-    if (seen.has(current)) break;
-    seen.add(current);
-    values.push(current.val);
-    current = current.next;
+  let current: unknown = node;
+
+  while (current !== null) {
+    const isListNodeShape =
+      typeof current === "object" &&
+      current !== undefined &&
+      "val" in (current as object) &&
+      "next" in (current as object);
+
+    if (!isListNodeShape) {
+      // Anything other than `null` or a proper { val, next } chain is
+      // malformed/undefined output (e.g. a student function that forgot
+      // to `return`). Throw so the per-test-case try/catch reports the
+      // real raw value as a failed test instead of silently passing.
+      throw new Error(
+        `Expected a linked list node or null, but received ${JSON.stringify(current)}`,
+      );
+    }
+
+    const typedCurrent = current as RawListNode;
+    if (seen.has(typedCurrent)) break;
+    seen.add(typedCurrent);
+    values.push(typedCurrent.val);
+    current = typedCurrent.next;
   }
+
   return values;
 }
 
@@ -187,9 +207,15 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
     const results: WorkerTestResult[] = testCases.map((testCase, index) => {
       const label = testCase.label ?? `Test case ${index + 1}`;
 
+      // Declared outside the try block so the catch block can report the
+      // real raw value the student's function returned (e.g. when
+      // dehydration via listToArray throws on malformed/undefined output),
+      // rather than a hardcoded `undefined`.
+      let actual: unknown;
+
       try {
         const hydratedInput = testCase.input.map(hydrate);
-        let actual: unknown = fn(...hydratedInput);
+        actual = fn(...hydratedInput);
 
         if (testCase.resultType === "list") {
           actual = listToArray(actual);
@@ -208,7 +234,7 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
           label,
           passed: false,
           expected: testCase.expected,
-          actual: undefined,
+          actual,
           error: error instanceof Error ? error.message : String(error),
         };
       }
