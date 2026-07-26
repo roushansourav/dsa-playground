@@ -123,6 +123,11 @@ The O(1) trick is a **second stack tracking the running minimum**: on push, push
         args: [[], [5], [3], [], [], []],
         expected: [null, null, null, 3, null, 5],
       },
+      {
+        operations: ["MinStack", "push", "push", "push", "getMin", "pop", "getMin", "top"],
+        args: [[], [2], [0], [0], [], [], [], []],
+        expected: [null, null, null, null, 0, null, 0, 0],
+      },
     ],
   },
   {
