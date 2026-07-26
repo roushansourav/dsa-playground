@@ -86,6 +86,24 @@ export const topics: Topic[] = [
       "daily-temperatures",
     ],
   },
+  {
+    slug: "binary-search",
+    title: "Binary Search",
+    track: "pattern",
+    order: 6,
+    description:
+      "Search sorted arrays, rotated arrays, and answer spaces in O(log n). The pattern behind every 'minimize/maximize with a monotonic check' problem.",
+    whyItMatters:
+      "Binary search interviews split into two camps: search on a literal sorted array, and 'binary search on the answer' where the array is a search space of candidate solutions. Amazon and Google interviews test both, and rotated-array variants are a recurring Meta/Microsoft filter question.",
+    problemSlugs: [
+      "binary-search",
+      "search-2d-matrix",
+      "koko-eating-bananas",
+      "search-rotated-array",
+      "find-min-rotated",
+      "time-based-kv-store",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
