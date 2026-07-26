@@ -69,6 +69,23 @@ export const topics: Topic[] = [
       "merge-k-sorted-lists",
     ],
   },
+  {
+    slug: "stack",
+    title: "Stack",
+    track: "pattern",
+    order: 5,
+    description:
+      "LIFO ordering for matching, undo, and monotonic-sequence problems. The pattern behind parsing, expression evaluation, and next-greater-element queries.",
+    whyItMatters:
+      "Stacks turn recursive/nested structure (brackets, expressions) into an iterative O(n) pass. The monotonic stack technique (Daily Temperatures) is a MAANG staple for 'next greater/smaller' questions.",
+    problemSlugs: [
+      "valid-parentheses",
+      "min-stack",
+      "evaluate-reverse-polish-notation",
+      "generate-parentheses",
+      "daily-temperatures",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
