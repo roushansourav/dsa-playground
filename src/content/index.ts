@@ -3,6 +3,7 @@ import { binarySearchProblems } from "./problems/binary-search";
 import { linkedListProblems } from "./problems/linked-lists";
 import { slidingWindowProblems } from "./problems/sliding-window";
 import { stackProblems } from "./problems/stack";
+import { treeProblems } from "./problems/trees";
 import { twoPointerProblems } from "./problems/two-pointers";
 import { topics } from "./topics";
 import type { Problem, Topic } from "./types";
@@ -17,6 +18,7 @@ const allProblems: Problem[] = [
   ...linkedListProblems,
   ...stackProblems,
   ...binarySearchProblems,
+  ...treeProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));

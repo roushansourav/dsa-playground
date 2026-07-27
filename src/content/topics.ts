@@ -104,6 +104,30 @@ export const topics: Topic[] = [
       "time-based-kv-store",
     ],
   },
+  {
+    slug: "trees",
+    title: "Trees",
+    track: "pattern",
+    order: 7,
+    description:
+      "Recursive traversal and structural reasoning on binary trees: depth, balance, BST invariants, and path problems. The pivot point into recursion-heavy patterns.",
+    whyItMatters:
+      "Trees are where interviews stop rewarding memorized templates and start rewarding a candidate's ability to state a recursive invariant precisely (a bounds range, a height contract, a return-vs-track-globally split) and hold it under a hard problem like Binary Tree Maximum Path Sum. Google, Amazon, and Meta all treat tree recursion fluency as a baseline signal, not a bonus.",
+    problemSlugs: [
+      "invert-binary-tree",
+      "max-depth-binary-tree",
+      "diameter-binary-tree",
+      "balanced-binary-tree",
+      "same-tree",
+      "subtree-of-another-tree",
+      "level-order-traversal",
+      "validate-bst",
+      "kth-smallest-bst",
+      "lowest-common-ancestor-bst",
+      "max-path-sum",
+      "serialize-deserialize-tree",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
