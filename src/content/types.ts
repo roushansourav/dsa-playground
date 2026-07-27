@@ -12,6 +12,17 @@ export interface TestCase {
   args?: unknown[][];
   operationResultTypes?: Array<"tree" | null>;
   skipOutputCheck?: number[];
+  unordered?: boolean;
+}
+
+export interface Solution {
+  approach: string;
+  timeComplexity: string;
+  spaceComplexity: string;
+  overviewMarkdown: string;
+  code: string;
+  lineByLineMarkdown: string;
+  dryRunMarkdown: string;
 }
 
 export interface Problem {
@@ -24,6 +35,9 @@ export interface Problem {
   starterCode: string;
   functionName: string;
   testCases: TestCase[];
+  solutions?: Solution[];
+  relatedSlugs?: string[];
+  realWorldUsageMarkdown?: string;
 }
 
 export interface Topic {
