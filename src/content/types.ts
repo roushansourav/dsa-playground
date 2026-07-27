@@ -7,9 +7,11 @@ export interface TestCase {
   input?: unknown[];
   expected: unknown;
   label?: string;
-  resultType?: "list";
+  resultType?: "list" | "tree";
   operations?: string[];
   args?: unknown[][];
+  operationResultTypes?: Array<"tree" | null>;
+  skipOutputCheck?: number[];
 }
 
 export interface Problem {

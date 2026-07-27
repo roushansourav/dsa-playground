@@ -4,9 +4,11 @@ interface WorkerTestCase {
   input?: unknown[];
   expected: unknown;
   label?: string;
-  resultType?: "list";
+  resultType?: "list" | "tree";
   operations?: string[];
   args?: unknown[][];
+  operationResultTypes?: Array<"tree" | null>;
+  skipOutputCheck?: number[];
 }
 
 interface WorkerPayload {
@@ -127,6 +129,90 @@ function listToArray(node: unknown): number[] {
   return values;
 }
 
+interface RawTreeNode {
+  val: number;
+  left: RawTreeNode | null;
+  right: RawTreeNode | null;
+}
+
+interface TreeNodeMarker {
+  __treeNode: (number | null)[];
+}
+
+function isTreeNodeMarker(value: unknown): value is TreeNodeMarker {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    Array.isArray((value as TreeNodeMarker).__treeNode)
+  );
+}
+
+function arrayToTree(values: (number | null)[]): RawTreeNode | null {
+  if (values.length === 0 || values[0] === null) return null;
+  const root: RawTreeNode = { val: values[0], left: null, right: null };
+  const queue: RawTreeNode[] = [root];
+  let i = 1;
+  while (queue.length && i < values.length) {
+    const node = queue.shift() as RawTreeNode;
+    if (i < values.length) {
+      const leftVal = values[i++];
+      if (leftVal !== null) {
+        const leftNode: RawTreeNode = { val: leftVal, left: null, right: null };
+        node.left = leftNode;
+        queue.push(leftNode);
+      }
+    }
+    if (i < values.length) {
+      const rightVal = values[i++];
+      if (rightVal !== null) {
+        const rightNode: RawTreeNode = { val: rightVal, left: null, right: null };
+        node.right = rightNode;
+        queue.push(rightNode);
+      }
+    }
+  }
+  return root;
+}
+
+function treeToArray(node: unknown): (number | null)[] {
+  if (node === null) return [];
+
+  const values: (number | null)[] = [];
+  const queue: unknown[] = [node];
+
+  while (queue.length) {
+    const current = queue.shift();
+    if (current === null) {
+      values.push(null);
+      continue;
+    }
+
+    const isTreeNodeShape =
+      typeof current === "object" &&
+      current !== undefined &&
+      "val" in (current as object) &&
+      "left" in (current as object) &&
+      "right" in (current as object);
+
+    if (!isTreeNodeShape) {
+      throw new Error(
+        `Expected a tree node or null, but received ${JSON.stringify(current)}`,
+      );
+    }
+
+    const typedCurrent = current as RawTreeNode;
+    values.push(typedCurrent.val);
+    queue.push(typedCurrent.left);
+    queue.push(typedCurrent.right);
+  }
+
+  while (values.length && values[values.length - 1] === null) {
+    values.pop();
+  }
+
+  return values;
+}
+
 function hydrate(value: unknown): unknown {
   if (Array.isArray(value)) {
     return value.map(hydrate);
@@ -136,6 +222,9 @@ function hydrate(value: unknown): unknown {
   }
   if (isCycleListMarker(value)) {
     return buildCycleList(value.__cycleList.values, value.__cycleList.pos);
+  }
+  if (isTreeNodeMarker(value)) {
+    return arrayToTree(value.__treeNode);
   }
   if (value && typeof value === "object") {
     const result: Record<string, unknown> = {};
@@ -220,19 +309,34 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
           const ops = testCase.operations;
           const argsList = testCase.args ?? [];
           const outputs: unknown[] = [];
+          const rawOutputs: unknown[] = [];
           let instance: unknown;
 
           ops.forEach((op, opIndex) => {
-            const callArgs = (argsList[opIndex] ?? []).map(hydrate);
+            const rawArgs = argsList[opIndex] ?? [];
+            const callArgs = rawArgs.map((arg) =>
+              arg === "$prevOutput" ? rawOutputs[opIndex - 1] : hydrate(arg),
+            );
+
             if (opIndex === 0) {
               instance = new (fn as unknown as new (...ctorArgs: unknown[]) => unknown)(
                 ...callArgs,
               );
+              rawOutputs.push(undefined);
               outputs.push(null);
+              return;
+            }
+
+            const method = (instance as Record<string, (...methodArgs: unknown[]) => unknown>)[op];
+            const rawResult = method.apply(instance, callArgs);
+            rawOutputs.push(rawResult);
+
+            if (testCase.skipOutputCheck?.includes(opIndex)) {
+              outputs.push(null);
+            } else if (testCase.operationResultTypes?.[opIndex] === "tree") {
+              outputs.push(treeToArray(rawResult));
             } else {
-              const method = (instance as Record<string, (...methodArgs: unknown[]) => unknown>)[op];
-              const result = method.apply(instance, callArgs);
-              outputs.push(result === undefined ? null : result);
+              outputs.push(rawResult === undefined ? null : rawResult);
             }
           });
 
@@ -243,6 +347,8 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
 
           if (testCase.resultType === "list") {
             actual = listToArray(actual);
+          } else if (testCase.resultType === "tree") {
+            actual = treeToArray(actual);
           }
         }
 
