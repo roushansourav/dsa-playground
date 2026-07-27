@@ -126,6 +126,7 @@ function diameterOfBinaryTree(root) {
       { input: [{ __treeNode: [1, 2, 3, 4, 5] }], expected: 3 },
       { input: [{ __treeNode: [1, 2] }], expected: 1 },
       { input: [{ __treeNode: [1] }], expected: 0 },
+      { input: [{ __treeNode: [1, 2, null, 3, 4, 5, null, 6] }], expected: 4 },
     ],
   },
   {
@@ -165,6 +166,7 @@ function isBalanced(root) {
       { input: [{ __treeNode: [3, 9, 20, null, null, 15, 7] }], expected: true },
       { input: [{ __treeNode: [1, 2, 2, 3, 3, null, null, 4, 4] }], expected: false },
       { input: [{ __treeNode: [] }], expected: true },
+      { input: [{ __treeNode: [1, 2, 5, 3, null, 6, null, 4] }], expected: false },
     ],
   },
   {
@@ -323,6 +325,7 @@ function isValidBST(root) {
       { input: [{ __treeNode: [2, 1, 3] }], expected: true },
       { input: [{ __treeNode: [5, 1, 4, null, null, 3, 6] }], expected: false },
       { input: [{ __treeNode: [1, 1] }], expected: false },
+      { input: [{ __treeNode: [5, 4, 6, null, null, 3, 7] }], expected: false },
     ],
   },
   {
@@ -467,6 +470,7 @@ function maxPathSum(root) {
       { input: [{ __treeNode: [1, 2, 3] }], expected: 6 },
       { input: [{ __treeNode: [-10, 9, 20, null, null, 15, 7] }], expected: 42 },
       { input: [{ __treeNode: [-3] }], expected: -3 },
+      { input: [{ __treeNode: [2, -1, -2] }], expected: 2 },
     ],
   },
   {
