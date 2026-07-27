@@ -9,6 +9,7 @@ interface WorkerTestCase {
   args?: unknown[][];
   operationResultTypes?: Array<"tree" | null>;
   skipOutputCheck?: number[];
+  unordered?: boolean;
 }
 
 interface WorkerPayload {
@@ -240,6 +241,14 @@ function deepEqual(a: unknown, b: unknown): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+function unorderedEqual(a: unknown, b: unknown): boolean {
+  if (!Array.isArray(a) || !Array.isArray(b)) return deepEqual(a, b);
+  if (a.length !== b.length) return false;
+  const sortedA = [...a].map((x) => JSON.stringify(x)).sort();
+  const sortedB = [...b].map((x) => JSON.stringify(x)).sort();
+  return deepEqual(sortedA, sortedB);
+}
+
 self.onmessage = (event: MessageEvent<WorkerPayload>) => {
   const { code, functionName, testCases } = event.data;
   const consoleOutput: string[] = [];
@@ -352,7 +361,9 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
           }
         }
 
-        const passed = deepEqual(actual, testCase.expected);
+        const passed = testCase.unordered
+          ? unorderedEqual(actual, testCase.expected)
+          : deepEqual(actual, testCase.expected);
 
         return {
           label,

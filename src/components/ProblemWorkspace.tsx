@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 
+import { getProblemBySlug } from "@/content";
 import type { Problem, ProgressStatus, RunResult } from "@/content/types";
 import { runCodeInWorker } from "@/lib/run-code";
 import {
@@ -33,6 +34,32 @@ interface ProblemWorkspaceProps {
   nextSlug?: string;
 }
 
+type WorkspaceTab = "description" | "solution" | "related" | "real-world";
+
+function buildSolutionMarkdown(
+  solution: NonNullable<Problem["solutions"]>[number],
+): string {
+  return `## Overview
+
+${solution.overviewMarkdown}
+
+**Time complexity:** ${solution.timeComplexity} · **Space complexity:** ${solution.spaceComplexity}
+
+## Code
+
+\`\`\`javascript
+${solution.code}
+\`\`\`
+
+## Line by Line
+
+${solution.lineByLineMarkdown}
+
+## Dry Run
+
+${solution.dryRunMarkdown}`;
+}
+
 export function ProblemWorkspace({
   problem,
   topicTitle,
@@ -51,12 +78,16 @@ export function ProblemWorkspace({
   const [result, setResult] = useState<RunResult | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<WorkspaceTab>("description");
+  const [activeApproachIndex, setActiveApproachIndex] = useState(0);
 
   useEffect(() => {
     setCode(initialCode ?? problem.starterCode);
     setStatus(initialStatus ?? "unsolved");
     setResult(null);
     setSaveMessage(null);
+    setActiveTab("description");
+    setActiveApproachIndex(0);
   }, [problem.slug, initialCode, initialStatus, problem.starterCode]);
 
   const persistProgress = useCallback(
@@ -157,8 +188,113 @@ export function ProblemWorkspace({
           </div>
         </div>
 
+        <div className="flex border-b border-zinc-200 px-5 dark:border-zinc-800">
+          {(
+            [
+              { key: "description", label: "Description" },
+              { key: "solution", label: "Solution" },
+              { key: "related", label: "Related" },
+              { key: "real-world", label: "Real-World" },
+            ] as const
+          ).map((tab) => (
+            <button
+              key={tab.key}
+              type="button"
+              onClick={() => setActiveTab(tab.key)}
+              className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium ${
+                activeTab === tab.key
+                  ? "border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400"
+                  : "border-transparent text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
         <div className="flex-1 overflow-y-auto px-5 py-4">
-          <ProblemMarkdown description={problem.description} />
+          {activeTab === "description" && (
+            <ProblemMarkdown description={problem.description} />
+          )}
+
+          {activeTab === "solution" && (
+            <>
+              {!problem.solutions || problem.solutions.length === 0 ? (
+                <p className="text-sm text-zinc-500">
+                  No worked solution has been written up for this problem yet.
+                </p>
+              ) : (
+                <>
+                  {problem.solutions.length > 1 && (
+                    <div className="mb-4 flex flex-wrap gap-2">
+                      {problem.solutions.map((solution, index) => (
+                        <button
+                          key={solution.approach}
+                          type="button"
+                          onClick={() => setActiveApproachIndex(index)}
+                          className={`rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset ${
+                            activeApproachIndex === index
+                              ? "bg-violet-600 text-white ring-violet-600"
+                              : "text-zinc-600 ring-zinc-300 hover:bg-zinc-100 dark:text-zinc-300 dark:ring-zinc-700 dark:hover:bg-zinc-800"
+                          }`}
+                        >
+                          {solution.approach}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <ProblemMarkdown
+                    description={buildSolutionMarkdown(
+                      problem.solutions[
+                        Math.min(activeApproachIndex, problem.solutions.length - 1)
+                      ],
+                    )}
+                  />
+                </>
+              )}
+            </>
+          )}
+
+          {activeTab === "related" && (
+            <>
+              {!problem.relatedSlugs || problem.relatedSlugs.length === 0 ? (
+                <p className="text-sm text-zinc-500">
+                  No related problems have been linked yet.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {problem.relatedSlugs.map((slug) => {
+                    const related = getProblemBySlug(slug);
+                    if (!related) return null;
+                    return (
+                      <li key={slug}>
+                        <Link
+                          href={`/problems/${slug}`}
+                          className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 text-sm hover:border-violet-400 dark:border-zinc-700"
+                        >
+                          <span>{related.title}</span>
+                          <span
+                            className={`rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${difficultyBadgeClass(related.difficulty)}`}
+                          >
+                            {related.difficulty}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
+          )}
+
+          {activeTab === "real-world" && (
+            <ProblemMarkdown
+              description={
+                problem.realWorldUsageMarkdown ??
+                "Real-world usage notes have not been written for this problem yet."
+              }
+            />
+          )}
         </div>
 
         <div className="border-t border-zinc-200 px-5 py-4 dark:border-zinc-800">
