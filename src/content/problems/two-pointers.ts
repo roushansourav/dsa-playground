@@ -323,7 +323,7 @@ Result: **[[-1,-1,2],[-1,0,1]]** — matches expected (including order).`,
         dryRunMarkdown: `**Dry run 1** — \`[-1,0,1,2,-1,-4]\`:
 sorted=[-4,-1,-1,0,1,2].
 i=0(-4): left1(-1),right5(2)→sum-3<0→left++; left2(-1),right5→sum-3<0→left++; left3(0),right5→sum-2<0→left++; left4(1),right5→sum-1<0→left++→left=right=5→stop. No triplet.
-i=1(-1): left2(-1),right5(2)→sum=0 → push **[-1,-1,2]**; no adjacent dup at left/right→left3,right4. sum=-1+0+1=0 → push **[-1,0,1]**; left4=right4→stop.
+i=1(-1): left2(-1),right5(2)→sum=0 → push **[-1,-1,2]**; no adjacent dup at left/right→left3,right4. sum=-1+0+1=0 → push **[-1,0,1]**; left4>right3→stop.
 i=2(-1): duplicate of sorted[1]=-1 → skip.
 i=3(0): left4(1),right5(2)→sum=3>0→right--→left4=right4→stop.
 Result: **[[-1,-1,2],[-1,0,1]]** — matches expected (including order).
