@@ -176,7 +176,7 @@ Max = **3** — matches expected.`,
         timeComplexity: "O(n)",
         spaceComplexity: "O(min(n, alphabet size))",
         overviewMarkdown:
-          "Maintain a sliding window using two pointers (`left`, `right`). Use a `Map` to record the most recent index of each character. When the right pointer encounters a character already in the window (at index ≥ left), jump the left pointer past the previous occurrence. The maximum window size encountered is the answer.",
+          "Slide a window `[left, right]` across the string using a map of each character's last-seen index. When `right` lands on a character already in the window, jump `left` directly past its previous occurrence instead of incrementing one step at a time — this is what turns the brute force's restart-from-scratch into a single forward pass.",
         code: `function lengthOfLongestSubstring(s) {
   const lastSeen = new Map();
   let left = 0;
@@ -215,7 +215,7 @@ Return **1** — matches expected.`,
       },
     ],
     relatedSlugs: ["longest-repeating-character-replacement", "minimum-window-substring"],
-    realWorldUsageMarkdown: `This is a classic technique for finding patterns without duplicates — e.g. finding the longest run of consecutive unique request IDs in a log stream, or the largest token sequence without repetition in a language model's context window.`,
+    realWorldUsageMarkdown: `The jump-left-past-the-duplicate technique is used in log deduplication and rate limiting — e.g. "reject this event if its token appeared anywhere in the last N-event window" — and in unique-session windowing for streaming analytics, where the window must always represent a currently-unique set without rescanning from scratch on every new event.`,
   },
   {
     slug: "longest-repeating-character-replacement",
@@ -259,7 +259,7 @@ function characterReplacement(s, k) {
         timeComplexity: "O(n²)",
         spaceComplexity: "O(1) (fixed 26-letter frequency map)",
         overviewMarkdown:
-          "For each starting position, extend the window rightward and track character frequencies. Stop expanding once the window would require more than `k` replacements (i.e., `windowSize - mostFrequentCount > k`). Simple, but re-tests every possible window.",
+          "For every starting index, extend a window rightward, maintaining a frequency count and the max-frequency character seen. Since window size grows by 1 and the max frequency can grow by at most 1 each step, once the window becomes invalid (`size - maxFreq > k`) it stays invalid for that start — so the inner loop can break early.",
         code: `function characterReplacement(s, k) {
   let maxLen = 0;
   for (let i = 0; i < s.length; i++) {
@@ -295,7 +295,7 @@ Return **4** — matches expected.`,
         timeComplexity: "O(n)",
         spaceComplexity: "O(1) (fixed 26-letter frequency map)",
         overviewMarkdown:
-          "Maintain a sliding window with two pointers. Track character frequencies and the best (or stale) max frequency seen. Expand the right pointer and shrink from the left only when the number of replacements needed exceeds `k`. The key insight: we never shrink below a valid window size, so the maximum window found is the answer.",
+          "Slide `right` across the string, always expanding. If the window becomes invalid, slide `left` forward by exactly one instead of re-validating — the window's *size* never needs to shrink below the best length already found, because a smaller invalid window can't beat the current best anyway. `maxFreq` is allowed to go stale (never decreased) — it can only ever be an overestimate for a past position, and an overestimate only makes the algorithm slightly more conservative about when to slide, never wrong about the final answer.",
         code: `function characterReplacement(s, k) {
   const freq = {};
   let left = 0;
@@ -336,7 +336,7 @@ Return **4** — matches expected.`,
       },
     ],
     relatedSlugs: ["longest-substring-without-repeating", "sliding-window-maximum"],
-    realWorldUsageMarkdown: `This technique appears in pattern matching and data compression — e.g. finding the longest run of mostly-one-kind-of-request (or mostly-one-status-code) allowing a small error budget, useful for bounding anomaly-detection thresholds or computing service-level metrics.`,
+    realWorldUsageMarkdown: `The "windowSize - maxFrequency ≤ k" validity check generalizes to noisy-signal analysis — e.g. finding the longest run of a dominant sensor reading while tolerating up to k corrupted samples, or burst-tolerant stream analysis in error-correction contexts where a bounded number of outliers shouldn't break a run.`,
   },
   {
     slug: "minimum-window-substring",
@@ -380,7 +380,7 @@ function minWindow(s, t) {
         timeComplexity: "O(n³)",
         spaceComplexity: "O(m)",
         overviewMarkdown:
-          "Generate every substring of `s` in order of starting position, then length. For each substring, check if it contains all required characters in the right counts. Once a starting position yields a valid substring, it's the shortest for that start, so move to the next start. Correct but expensive: generates O(n²) substrings and checks each one.",
+          "Check every substring `s[i..j]`, and for each one build a frequency count to verify it contains every character of `t` at least as many times. Track the shortest valid one. Straightforward, but rebuilds a frequency count from scratch for every single substring.",
         code: `function minWindow(s, t) {
   const need = {};
   for (const c of t) need[c] = (need[c] || 0) + 1;
@@ -422,7 +422,7 @@ Return **""** — matches expected.`,
         timeComplexity: "O(n + m)",
         spaceComplexity: "O(m)",
         overviewMarkdown:
-          "Use two pointers (`left`, `right`) to maintain a window. Track character frequencies in the window and count how many distinct required characters are satisfied (formed). Expand the right pointer; when the window is valid (all required characters present), record it if it's the shortest so far, then shrink from the left to try to find something even shorter. Once shrinking breaks validity, expand again.",
+          "Expand `right` across `s`, tracking how many *distinct required characters* currently have enough copies in the window (`formed`) versus how many are needed (`required`). Whenever `formed === required` the window is valid — shrink `left` as far as possible while it stays valid, recording the shortest window found along the way.",
         code: `function minWindow(s, t) {
   if (t.length > s.length) return "";
   const need = {};
@@ -470,22 +470,12 @@ right0'a': windowCounts{a:1}. need[a]=2, 1===2? no → formed stays 0. Loop ends
 resLen never updated (stays Infinity) → return **""** — matches expected.
 
 **Dry run 3** — \`s="ADOBECODEBANC", t="ABC"\`:
-need={A:1,B:1,C:1}, required=3.
-right0'A': windowCounts{A:1}, formed=1.
-right1'D': windowCounts{A:1,D:1}, formed=1.
-right2'O': windowCounts{A:1,D:1,O:1}, formed=1.
-right3'B': windowCounts{A:1,D:1,O:1,B:1}, formed=2.
-right4'E': windowCounts{A:1,D:1,O:1,B:1,E:1}, formed=2.
-right5'C': windowCounts{A:1,D:1,O:1,B:1,E:1,C:1}, formed=3. While(3===3): len=6, resLen=6, resLeft=0. Shrink(left=0,A): windowCounts[A]=0, 0<1→formed=2, left=1. Exit while.
-...continue expanding...
-right9'A': windowCounts restored to include A at position 9, formed=3. While: window "ODEBANC" (left=3,right=9, len=7) not better. Shrink...
-...continuing through the string...
-right12'C': formed=3. While: window starting at left=9 is "BANC" (indices 9-12, len=4) < 6 → resLen=4, resLeft=9. Shrink further until valid window breaks.
+need={A:1,B:1,C:1}, required=3. Expanding right, \`formed\` reaches 3 for the first time at right=5 (window "ADOBEC", length 6) — shrinking from there drops \`formed\` back to 2. Expanding again, \`formed\` reaches 3 a second time at right=10 (window "DOBECODEBA" onward); shrinking this time walks left all the way from index 1 to index 9, passing through valid windows of length 10, 9, 8, 7, 6 (tied, not shorter), then finding new shortest windows "EBANC" (length 5, left=8) and finally "BANC" (length 4, left=9) before invalidity breaks the shrink at left=10.
 Final shortest window: \`s.slice(9, 13)\` = **"BANC"** — matches expected.`,
       },
     ],
     relatedSlugs: ["longest-substring-without-repeating", "sliding-window-maximum"],
-    realWorldUsageMarkdown: `The sliding-window pattern for "find the shortest substring containing all required elements" is common in data filtering — e.g. finding the shortest log entry range that includes all error messages from a set of processes, or the minimal time window in a data stream that covers all sensors in a monitoring system.`,
+    realWorldUsageMarkdown: `The formed/required frequency-matching window models exact multi-criteria search — e.g. finding the shortest log excerpt that contains every required event code, or the shortest DNA segment containing all bases of a target motif in bioinformatics — anywhere "shrink while still satisfying every requirement" applies.`,
   },
   {
     slug: "sliding-window-maximum",
@@ -559,7 +549,7 @@ Window [0,0]: max=1. Window [1,1]: max=-1 → result=[1,-1] — matches expected
         timeComplexity: "O(n)",
         spaceComplexity: "O(k)",
         overviewMarkdown:
-          "Maintain a deque of indices in strictly decreasing order of their values (left to right). When adding a new index, pop any indices with smaller values — they can never be the max while a larger value is still in the window. Drop indices that fall outside the left boundary. The front of the deque is always the current window's max.",
+          "Maintain a deque of indices whose corresponding values are in strictly decreasing order — the front is always the max of the current window. On each step: pop from the back any indices whose values are ≤ the new value (they can never be the max again, since the new element is both later and at least as large), push the new index, then drop the front index if it has slid out of the window. Each index is pushed and popped at most once, giving O(n) total.",
         code: `function maxSlidingWindow(nums, k) {
   const deque = []; // stores indices, values decreasing left to right
   const result = [];
@@ -600,6 +590,6 @@ Return **[1,-1]** — matches expected.`,
       },
     ],
     relatedSlugs: ["minimum-window-substring", "longest-repeating-character-replacement"],
-    realWorldUsageMarkdown: `This monotonic deque pattern is powerful for any "sliding aggregation" — e.g. real-time peak load tracking over a time window, finding local maxima in sensor data, or computing the maximum profit within every k-consecutive-day range in stock prices.`,
+    realWorldUsageMarkdown: `The monotonic deque is the standard technique behind streaming rolling-max/min analytics — e.g. tracking the maximum stock price or sensor reading over a trailing time window in real time — where O(1) amortized updates per new data point matter at high throughput.`,
   },
 ];
