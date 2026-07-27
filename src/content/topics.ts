@@ -128,6 +128,25 @@ export const topics: Topic[] = [
       "serialize-deserialize-tree",
     ],
   },
+  {
+    slug: "heaps",
+    title: "Heaps",
+    track: "pattern",
+    order: 8,
+    description:
+      "Priority-driven problems: always grab the current min or max in O(log n). Streaming top-K, scheduling, and median tracking all reduce to heap operations.",
+    whyItMatters:
+      "Heaps are the answer whenever 'give me the current best/worst so far' must stay fast as data streams in. Google and Amazon lean on heap fluency for design-style questions (Design Twitter, Median Finder) as much as raw algorithm questions.",
+    problemSlugs: [
+      "kth-largest-in-stream",
+      "last-stone-weight",
+      "k-closest-points-to-origin",
+      "kth-largest-element-in-array",
+      "task-scheduler",
+      "design-twitter",
+      "find-median-from-data-stream",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
