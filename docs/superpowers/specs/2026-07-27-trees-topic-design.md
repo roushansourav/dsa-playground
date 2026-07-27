@@ -116,12 +116,14 @@ whichever side both `p.val` and `q.val` fall on, until they diverge (or one
 equals the current node) — that node is the LCA. `p`/`q` hydrate as
 **standalone single-node trees**, not references into `root` — see Harness
 extension below for why, and note the problem statement instructs
-comparing via `.val`, matching this standard technique. Return value
-is dehydrated as a tree (a single-node tree, since only `val` is checked
-via a `resultType: "tree"` array comparison against a one-element array).
-- `{ input: [{ __treeNode: [6,2,8,0,4,7,9,null,null,3,5] }, { __treeNode: [2] }, { __treeNode: [8] }], expected: [6], resultType: "tree" }`
-- `{ input: [{ __treeNode: [6,2,8,0,4,7,9,null,null,3,5] }, { __treeNode: [2] }, { __treeNode: [4] }], expected: [2], resultType: "tree" }`
-- `{ input: [{ __treeNode: [2,1] }, { __treeNode: [2] }, { __treeNode: [1] }], expected: [2], resultType: "tree" }`
+comparing via `.val`, matching this standard technique. The returned
+node is a real object from within the original `root` tree, still
+attached to its real children, so `resultType: "tree"` dehydration
+serializes the **entire subtree hanging off the returned node** via BFS —
+not just the node's own value.
+- `{ input: [{ __treeNode: [6,2,8,0,4,7,9,null,null,3,5] }, { __treeNode: [2] }, { __treeNode: [8] }], expected: [6,2,8,0,4,7,9,null,null,3,5], resultType: "tree" }`
+- `{ input: [{ __treeNode: [6,2,8,0,4,7,9,null,null,3,5] }, { __treeNode: [2] }, { __treeNode: [4] }], expected: [2,0,4,null,null,3,5], resultType: "tree" }`
+- `{ input: [{ __treeNode: [2,1] }, { __treeNode: [2] }, { __treeNode: [1] }], expected: [2,1], resultType: "tree" }`
 
 **11. `max-path-sum`** — `maxPathSum(root: TreeNode | null): number`
 (LeetCode 124). At each node during a post-order traversal, compute the
