@@ -314,6 +314,25 @@ export const topics: Topic[] = [
       "multiply-strings",
     ],
   },
+  {
+    slug: "advanced-graphs",
+    title: "Advanced Graphs",
+    track: "pattern",
+    order: 18,
+    description:
+      "Beyond plain BFS/DFS: minimum spanning trees, single-source shortest paths, minimax paths, and topological ordering under real-world weight and constraint conditions.",
+    whyItMatters:
+      "Advanced graph algorithms — Dijkstra, Prim's, Bellman-Ford, Hierholzer's, Kahn's — are the last mile between 'knows graph traversal' and 'can pick the right algorithm for the actual constraint.' Google, Amazon, and Meta use these to see whether a candidate matches the algorithm to the problem's real shape (edge weights, stop limits, minimax objectives) instead of forcing plain BFS/DFS to fit.",
+    problemSlugs: [
+      "reconstruct-itinerary",
+      "min-cost-to-connect-points",
+      "network-delay-time",
+      "swim-in-rising-water",
+      "alien-dictionary",
+      "cheapest-flights-within-k-stops",
+      "path-with-minimum-effort",
+    ],
+  },
 ];
 
 export const foundationTopics = topics

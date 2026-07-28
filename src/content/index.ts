@@ -1,3 +1,4 @@
+import { advancedGraphProblems } from "./problems/advanced-graphs";
 import { arrayProblems } from "./problems/arrays";
 import { backtrackingProblems } from "./problems/backtracking";
 import { bitManipulationProblems } from "./problems/bit-manipulation";
@@ -39,6 +40,7 @@ const allProblems: Problem[] = [
   ...intervalProblems,
   ...bitManipulationProblems,
   ...mathGeometryProblems,
+  ...advancedGraphProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));
