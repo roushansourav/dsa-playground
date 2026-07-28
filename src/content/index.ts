@@ -6,6 +6,7 @@ import { twoDDpProblems } from "./problems/dp-2d";
 import { greedyProblems } from "./problems/greedy";
 import { graphProblems } from "./problems/graphs";
 import { heapProblems } from "./problems/heaps";
+import { intervalProblems } from "./problems/intervals";
 import { linkedListProblems } from "./problems/linked-lists";
 import { slidingWindowProblems } from "./problems/sliding-window";
 import { stackProblems } from "./problems/stack";
@@ -33,6 +34,7 @@ const allProblems: Problem[] = [
   ...oneDDpProblems,
   ...twoDDpProblems,
   ...greedyProblems,
+  ...intervalProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));

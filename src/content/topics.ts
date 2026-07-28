@@ -257,6 +257,25 @@ export const topics: Topic[] = [
       "valid-parenthesis-string",
     ],
   },
+  {
+    slug: "intervals",
+    title: "Intervals",
+    track: "pattern",
+    order: 15,
+    description:
+      "Reason about ranges instead of points: sort by start or end, sweep, and merge or count conflicts. The pattern behind scheduling, resource allocation, and range-overlap queries.",
+    whyItMatters:
+      "Interval problems test a specific judgment call — sort by start or by end? — and whether a candidate can justify it, not just produce it. Meeting Rooms II and Minimum Interval to Include Each Query push this into timestamp-sweep and offline-query territory that Google and Amazon use as senior-level filters, since the naive per-pair or per-query brute force is easy to write but the sweep requires actually understanding why sorting makes it monotonic.",
+    problemSlugs: [
+      "insert-interval",
+      "merge-intervals",
+      "non-overlapping-intervals",
+      "meeting-rooms",
+      "meeting-rooms-ii",
+      "minimum-interval-to-include-each-query",
+      "car-pooling",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
