@@ -9,6 +9,7 @@ import { graphProblems } from "./problems/graphs";
 import { heapProblems } from "./problems/heaps";
 import { intervalProblems } from "./problems/intervals";
 import { linkedListProblems } from "./problems/linked-lists";
+import { mathGeometryProblems } from "./problems/math-geometry";
 import { slidingWindowProblems } from "./problems/sliding-window";
 import { stackProblems } from "./problems/stack";
 import { treeProblems } from "./problems/trees";
@@ -37,6 +38,7 @@ const allProblems: Problem[] = [
   ...greedyProblems,
   ...intervalProblems,
   ...bitManipulationProblems,
+  ...mathGeometryProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));

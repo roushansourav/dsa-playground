@@ -295,6 +295,25 @@ export const topics: Topic[] = [
       "reverse-integer",
     ],
   },
+  {
+    slug: "math-geometry",
+    title: "Math & Geometry",
+    track: "foundation",
+    order: 17,
+    description:
+      "Reason directly about numbers and coordinate grids: in-place matrix transforms, digit-level arithmetic, and cycle detection over numeric sequences. A foundational skill independent of any one algorithmic pattern — precision, overflow, and geometric transforms recur across every other topic.",
+    whyItMatters:
+      "Math and geometry problems test whether a candidate respects the actual constraints of a number (overflow, precision, sign) instead of leaning on language built-ins that silently paper over them. Apple, Google, and Amazon use these as calibration questions that expose whether someone can derive a digit-by-digit multiplication, an in-place matrix rotation, or a cycle-detection argument from first principles rather than recalling a memorized template.",
+    problemSlugs: [
+      "rotate-image",
+      "spiral-matrix",
+      "set-matrix-zeroes",
+      "happy-number",
+      "plus-one",
+      "pow-x-n",
+      "multiply-strings",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
