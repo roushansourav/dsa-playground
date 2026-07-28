@@ -219,6 +219,25 @@ export const topics: Topic[] = [
       "longest-increasing-subsequence",
     ],
   },
+  {
+    slug: "2d-dp",
+    title: "2-D Dynamic Programming",
+    track: "pattern",
+    order: 13,
+    description:
+      "Extend the DP recurrence to two indices at once: grid paths, two-string alignment, and finite-state profit tracking. The pivot from 'remember one dimension' into 'remember a relationship between two.'",
+    whyItMatters:
+      "Two-string and grid DP problems (Edit Distance, LCS, Interleaving String) are the most common 'hard' DP filter in senior loops at Google, Amazon, and Meta, because the recurrence itself is only half the problem — mapping each table transition back to a concrete operation (replace vs. insert vs. delete, or match vs. skip) under interview pressure is what separates memorized templates from real understanding.",
+    problemSlugs: [
+      "unique-paths",
+      "longest-common-subsequence",
+      "best-time-to-buy-and-sell-stock-with-cooldown",
+      "coin-change-ii",
+      "target-sum",
+      "interleaving-string",
+      "edit-distance",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
