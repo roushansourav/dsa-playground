@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { auth, signIn, signOut } from "@/lib/auth";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export async function Navbar() {
   const session = await auth();
@@ -22,6 +23,8 @@ export async function Navbar() {
           >
             Dashboard
           </Link>
+
+          <ThemeToggle />
 
           {session?.user ? (
             <div className="flex items-center gap-3">

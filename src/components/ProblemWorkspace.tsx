@@ -36,6 +36,13 @@ interface ProblemWorkspaceProps {
 
 type WorkspaceTab = "description" | "solution" | "related" | "real-world";
 
+function formatDryRunMarkdown(markdown: string): string {
+  return markdown
+    .split("\n")
+    .map((line) => line.replace(/\.\s+(?=\S)/g, ".\n"))
+    .join("\n");
+}
+
 function buildSolutionMarkdown(
   solution: NonNullable<Problem["solutions"]>[number],
 ): string {
@@ -57,7 +64,7 @@ ${solution.lineByLineMarkdown}
 
 ## Dry Run
 
-${solution.dryRunMarkdown}`;
+${formatDryRunMarkdown(solution.dryRunMarkdown)}`;
 }
 
 export function ProblemWorkspace({
