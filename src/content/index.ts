@@ -18,11 +18,12 @@ import { treeProblems } from "./problems/trees";
 import { trieProblems } from "./problems/tries";
 import { twoPointerProblems } from "./problems/two-pointers";
 import { unionFindProblems } from "./problems/union-find";
+import { polyfillProblems } from "./problems/polyfills";
 import { topics } from "./topics";
 import type { Problem, Topic } from "./types";
 
 export * from "./types";
-export { topics, foundationTopics, patternTopics } from "./topics";
+export { topics, foundationTopics, patternTopics, javascriptTopics } from "./topics";
 
 const allProblems: Problem[] = [
   ...arrayProblems,
@@ -45,6 +46,7 @@ const allProblems: Problem[] = [
   ...advancedGraphProblems,
   ...unionFindProblems,
   ...designProblems,
+  ...polyfillProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));

@@ -353,6 +353,40 @@ export const topics: Topic[] = [
     ],
   },
   {
+    slug: "polyfills",
+    title: "Polyfills",
+    track: "javascript",
+    order: 21,
+    description:
+      "Rebuild the JavaScript standard library from scratch: Array iteration methods, Function context manipulation, Object prototype wiring, Promise coordination, and the two fundamental rate-limiting patterns — debounce and throttle.",
+    whyItMatters:
+      "Polyfill interviews are a Meta/Google frontend staple because they test two things at once: whether you understand the exact contract of a method (callback arity, edge cases, return value) and whether you can use closures, prototype chains, and the event loop correctly under the hood. A candidate who can re-implement `reduce`, `bind`, `Object.create`, and `Promise.all` from memory has demonstrated fluency with JavaScript's object model, async semantics, and function mechanics — not just API familiarity.",
+    problemSlugs: [
+      "array-map-polyfill",
+      "array-filter-polyfill",
+      "array-reduce-polyfill",
+      "array-foreach-polyfill",
+      "array-find-polyfill",
+      "array-findindex-polyfill",
+      "array-every-polyfill",
+      "array-some-polyfill",
+      "array-flat-polyfill",
+      "array-flatmap-polyfill",
+      "function-bind-polyfill",
+      "function-call-apply-polyfill",
+      "object-assign-polyfill",
+      "object-create-polyfill",
+      "promise-all-polyfill",
+      "promise-race-polyfill",
+      "debounce-polyfill",
+      "throttle-polyfill",
+      "promise-polyfill",
+      "use-state-polyfill",
+      "use-effect-polyfill",
+      "mini-react-polyfill",
+    ],
+  },
+  {
     slug: "design",
     title: "Design",
     track: "pattern",
@@ -379,4 +413,8 @@ export const foundationTopics = topics
 
 export const patternTopics = topics
   .filter((topic) => topic.track === "pattern")
+  .sort((a, b) => a.order - b.order);
+
+export const javascriptTopics = topics
+  .filter((topic) => topic.track === "javascript")
   .sort((a, b) => a.order - b.order);

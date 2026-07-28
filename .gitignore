@@ -36,10 +36,29 @@ yarn-error.log*
 # vercel
 .vercel
 
-# git worktrees
+# claude / AI tooling
+.claude/
 .claude/worktrees/
+.claude/settings.json
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/.headroom_wrap_marker.json
+
+# kirograph — entire directory is local/generated (config.json and claude.md can be re-generated)
+.kirograph/
+
+# MCP local config
+.mcp.json
+
+# tokensave
+.tokensave/
+
+# superpowers sdd output
+.superpowers/sdd/
+
+# vercel project metadata (machine-specific)
+.vercel/project.json
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.tokensave

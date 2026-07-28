@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   foundationTopics,
   getAllProblems,
+  javascriptTopics,
   patternTopics,
 } from "@/content";
 import type { ProgressStatus } from "@/content/types";
@@ -39,7 +40,11 @@ function TopicCard({
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-violet-600 dark:text-violet-400">
-            {topic.track === "foundation" ? "Foundation" : "Pattern"}
+            {topic.track === "foundation"
+              ? "Foundation"
+              : topic.track === "javascript"
+                ? "JavaScript"
+                : "Pattern"}
           </p>
           <h3 className="mt-1 text-lg font-semibold group-hover:text-violet-700 dark:group-hover:text-violet-300">
             {topic.title}
@@ -106,6 +111,22 @@ export function Dashboard({ progressByProblem }: DashboardProps) {
         <h2 className="mb-4 text-xl font-semibold">Pattern Track</h2>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {patternTopics.map((topic) => (
+            <TopicCard
+              key={topic.slug}
+              topic={topic}
+              progressByProblem={progressByProblem}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="mb-1 text-xl font-semibold">JavaScript Track</h2>
+        <p className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+          Rebuild the standard library from scratch — Array methods, Function mechanics, Object prototype wiring, Promise coordination, and rate-limiting utilities.
+        </p>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {javascriptTopics.map((topic) => (
             <TopicCard
               key={topic.slug}
               topic={topic}
