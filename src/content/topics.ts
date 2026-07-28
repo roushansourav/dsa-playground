@@ -238,6 +238,25 @@ export const topics: Topic[] = [
       "edit-distance",
     ],
   },
+  {
+    slug: "greedy",
+    title: "Greedy",
+    track: "pattern",
+    order: 14,
+    description:
+      "Make the locally optimal choice at each step and prove it never costs you the global optimum: running sums, reachability frontiers, and interval-style boundary tracking.",
+    whyItMatters:
+      "Greedy problems are a distinct interview signal from DP: the code is often short, but the interviewer is really testing whether you can articulate *why* the greedy choice is safe — why a negative prefix sum can be discarded, why the smallest remaining card must start a group, why a failed starting station rules out every station up to the failure. Amazon and Google frequently use these as fast, high-signal filters precisely because a memorized-but-not-understood greedy falls apart under a single 'why does that work?' follow-up.",
+    problemSlugs: [
+      "maximum-subarray",
+      "jump-game",
+      "jump-game-ii",
+      "gas-station",
+      "hand-of-straights",
+      "partition-labels",
+      "valid-parenthesis-string",
+    ],
+  },
 ];
 
 export const foundationTopics = topics

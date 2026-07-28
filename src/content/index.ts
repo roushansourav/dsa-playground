@@ -3,6 +3,7 @@ import { backtrackingProblems } from "./problems/backtracking";
 import { binarySearchProblems } from "./problems/binary-search";
 import { oneDDpProblems } from "./problems/dp-1d";
 import { twoDDpProblems } from "./problems/dp-2d";
+import { greedyProblems } from "./problems/greedy";
 import { graphProblems } from "./problems/graphs";
 import { heapProblems } from "./problems/heaps";
 import { linkedListProblems } from "./problems/linked-lists";
@@ -31,6 +32,7 @@ const allProblems: Problem[] = [
   ...trieProblems,
   ...oneDDpProblems,
   ...twoDDpProblems,
+  ...greedyProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));
