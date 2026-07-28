@@ -352,6 +352,25 @@ export const topics: Topic[] = [
       "evaluate-division",
     ],
   },
+  {
+    slug: "design",
+    title: "Design",
+    track: "pattern",
+    order: 20,
+    description:
+      "Build a data structure to spec, under a stated operation-complexity budget. No single algorithmic trick to spot — the skill is combining two or three simple structures so each one's weakness is covered by another's strength.",
+    whyItMatters:
+      "Design questions (LRU/LFU cache, time-based store, randomized set, custom hashmap, circular queue, trip-time tracker) are a recurring MAANG staple precisely because they can't be pattern-matched from a single template — they test whether a candidate can reason from a stated complexity budget back to a structure, and defend the trade-offs of their choice under follow-up questions ('what if capacity is huge', 'what if keys aren't small integers').",
+    problemSlugs: [
+      "lru-cache",
+      "lfu-cache",
+      "time-based-key-value-store",
+      "insert-delete-getrandom-o1",
+      "design-hashmap",
+      "design-circular-queue",
+      "design-underground-system",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
