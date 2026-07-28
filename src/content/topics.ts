@@ -276,6 +276,25 @@ export const topics: Topic[] = [
       "car-pooling",
     ],
   },
+  {
+    slug: "bit-manipulation",
+    title: "Bit Manipulation",
+    track: "foundation",
+    order: 16,
+    description:
+      "Reason directly about the binary representation of numbers: XOR-folds, popcount tricks, and carry propagation. A foundational skill independent of any one algorithmic pattern — it shows up as a building block inside DP, graph, and math problems alike.",
+    whyItMatters:
+      "Bit manipulation problems are short but unforgiving: there's nowhere to hide a shaky mental model of two's complement, XOR identities, or signed-vs-unsigned shifts. Apple, Google, and Amazon use these as fast calibration questions early in a loop — a candidate who can derive (not just recite) why `a ^ b` gives a carryless sum, or why `n & (n-1)` clears the lowest set bit, demonstrates the same bit-level fluency that later shows up in hashing, compression, and low-level systems questions.",
+    problemSlugs: [
+      "single-number",
+      "number-of-1-bits",
+      "counting-bits",
+      "reverse-bits",
+      "missing-number",
+      "sum-of-two-integers",
+      "reverse-integer",
+    ],
+  },
 ];
 
 export const foundationTopics = topics

@@ -1,5 +1,6 @@
 import { arrayProblems } from "./problems/arrays";
 import { backtrackingProblems } from "./problems/backtracking";
+import { bitManipulationProblems } from "./problems/bit-manipulation";
 import { binarySearchProblems } from "./problems/binary-search";
 import { oneDDpProblems } from "./problems/dp-1d";
 import { twoDDpProblems } from "./problems/dp-2d";
@@ -35,6 +36,7 @@ const allProblems: Problem[] = [
   ...twoDDpProblems,
   ...greedyProblems,
   ...intervalProblems,
+  ...bitManipulationProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));
