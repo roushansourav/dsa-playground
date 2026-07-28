@@ -333,6 +333,25 @@ export const topics: Topic[] = [
       "path-with-minimum-effort",
     ],
   },
+  {
+    slug: "union-find",
+    title: "Union-Find",
+    track: "pattern",
+    order: 19,
+    description:
+      "Dynamic connectivity: track which elements belong to the same group as unions arrive incrementally, without re-traversing the whole graph on every query. The pattern behind 'are these two things now connected' at scale.",
+    whyItMatters:
+      "Union-Find (Disjoint Set Union) is the structure interviews reach for the moment connectivity needs to be tracked incrementally rather than computed once from a static graph — path compression and union by rank/size push every operation to near-O(1) amortized. Google, Amazon, and Meta all use it as a distinct signal from plain BFS/DFS: candidates who default to Union-Find only when it's structurally the right fit (not just because it's memorized) stand out.",
+    problemSlugs: [
+      "number-of-provinces",
+      "redundant-connection",
+      "accounts-merge",
+      "graph-valid-tree",
+      "most-stones-removed-with-same-row-or-column",
+      "smallest-string-with-swaps",
+      "evaluate-division",
+    ],
+  },
 ];
 
 export const foundationTopics = topics

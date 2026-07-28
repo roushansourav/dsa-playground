@@ -16,6 +16,7 @@ import { stackProblems } from "./problems/stack";
 import { treeProblems } from "./problems/trees";
 import { trieProblems } from "./problems/tries";
 import { twoPointerProblems } from "./problems/two-pointers";
+import { unionFindProblems } from "./problems/union-find";
 import { topics } from "./topics";
 import type { Problem, Topic } from "./types";
 
@@ -41,6 +42,7 @@ const allProblems: Problem[] = [
   ...bitManipulationProblems,
   ...mathGeometryProblems,
   ...advancedGraphProblems,
+  ...unionFindProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));
