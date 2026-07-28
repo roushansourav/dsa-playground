@@ -200,6 +200,25 @@ export const topics: Topic[] = [
       "word-search-ii",
     ],
   },
+  {
+    slug: "1d-dp",
+    title: "1-D Dynamic Programming",
+    track: "pattern",
+    order: 12,
+    description:
+      "Break a problem into overlapping subproblems indexed by a single dimension (position, amount, length) and build the answer bottom-up. The pivot from 'recurse and prune' backtracking into 'recurse and remember.'",
+    whyItMatters:
+      "1-D DP is one of the most heavily weighted topics across MAANG onsites — it's the first place interviews test whether a candidate can spot overlapping subproblems, write a correct recurrence, and then push it from exponential recursion to memoized or bottom-up polynomial time, often collapsing an O(n) table into O(1) rolling state. Amazon, Google, and Meta all use it as a load-bearing signal for 'can this candidate reason about state and transitions,' not just 'can they code a loop.'",
+    problemSlugs: [
+      "climbing-stairs",
+      "house-robber",
+      "house-robber-ii",
+      "longest-palindromic-substring",
+      "coin-change",
+      "word-break",
+      "longest-increasing-subsequence",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
