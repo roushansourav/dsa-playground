@@ -147,6 +147,25 @@ export const topics: Topic[] = [
       "find-median-from-data-stream",
     ],
   },
+  {
+    slug: "graphs",
+    title: "Graphs",
+    track: "pattern",
+    order: 9,
+    description:
+      "Traversal and connectivity on explicit and implicit graphs: BFS/DFS, grid flood-fill, cycle detection, and Union-Find. The pivot from tree recursion into general graph reasoning.",
+    whyItMatters:
+      "Once a candidate can traverse a tree, interviews test whether that generalizes: to grids treated as implicit graphs, to directed graphs with cycles, to connectivity queries at scale via Union-Find, and to shortest-path search over graphs with no explicit edge list at all (Word Ladder). Google, Amazon, and Meta all use this topic to separate 'knows the BFS template' from 'can model a new problem as a graph.'",
+    problemSlugs: [
+      "find-if-path-exists-in-graph",
+      "number-of-islands",
+      "rotting-oranges",
+      "course-schedule",
+      "number-of-connected-components",
+      "pacific-atlantic-water-flow",
+      "word-ladder",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
