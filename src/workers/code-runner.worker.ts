@@ -237,6 +237,14 @@ function hydrate(value: unknown): unknown {
   return value;
 }
 
+function isThenable(value: unknown): value is Promise<unknown> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as { then?: unknown }).then === "function"
+  );
+}
+
 function deepEqual(a: unknown, b: unknown): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }
@@ -249,7 +257,7 @@ function unorderedEqual(a: unknown, b: unknown): boolean {
   return deepEqual(sortedA, sortedB);
 }
 
-self.onmessage = (event: MessageEvent<WorkerPayload>) => {
+self.onmessage = async (event: MessageEvent<WorkerPayload>) => {
   const { code, functionName, testCases } = event.data;
   const consoleOutput: string[] = [];
   const originalConsole = {
@@ -304,7 +312,7 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
       return;
     }
 
-    const results: WorkerTestResult[] = testCases.map((testCase, index) => {
+    const results: WorkerTestResult[] = await Promise.all(testCases.map(async (testCase, index) => {
       const label = testCase.label ?? `Test case ${index + 1}`;
 
       // Declared outside the try block so the catch block can report the
@@ -321,7 +329,8 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
           const rawOutputs: unknown[] = [];
           let instance: unknown;
 
-          ops.forEach((op, opIndex) => {
+          for (let opIndex = 0; opIndex < ops.length; opIndex++) {
+            const op = ops[opIndex];
             const rawArgs = argsList[opIndex] ?? [];
             const callArgs = rawArgs.map((arg) =>
               arg === "$prevOutput" ? rawOutputs[opIndex - 1] : hydrate(arg),
@@ -333,11 +342,14 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
               );
               rawOutputs.push(undefined);
               outputs.push(null);
-              return;
+              continue;
             }
 
             const method = (instance as Record<string, (...methodArgs: unknown[]) => unknown>)[op];
-            const rawResult = method.apply(instance, callArgs);
+            let rawResult = method.apply(instance, callArgs);
+            if (isThenable(rawResult)) {
+              rawResult = await rawResult;
+            }
             rawOutputs.push(rawResult);
 
             if (testCase.skipOutputCheck?.includes(opIndex)) {
@@ -347,12 +359,15 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
             } else {
               outputs.push(rawResult === undefined ? null : rawResult);
             }
-          });
+          }
 
           actual = outputs;
         } else {
           const hydratedInput = (testCase.input ?? []).map(hydrate);
           actual = fn(...hydratedInput);
+          if (isThenable(actual)) {
+            actual = await actual;
+          }
 
           if (testCase.resultType === "list") {
             actual = listToArray(actual);
@@ -380,7 +395,7 @@ self.onmessage = (event: MessageEvent<WorkerPayload>) => {
           error: error instanceof Error ? error.message : String(error),
         };
       }
-    });
+    }));
 
     const passed = results.filter((result) => result.passed).length;
 
