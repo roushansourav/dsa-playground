@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, type ComponentPropsWithoutRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";

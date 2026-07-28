@@ -24,6 +24,13 @@ export async function Navbar() {
             Dashboard
           </Link>
 
+          <Link
+            href="/system-design"
+            className="text-zinc-600 transition hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
+          >
+            System Design
+          </Link>
+
           <ThemeToggle />
 
           {session?.user ? (

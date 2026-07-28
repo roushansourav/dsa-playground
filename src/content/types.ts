@@ -1,7 +1,8 @@
 export type Difficulty = "easy" | "medium" | "hard";
-export type Track = "foundation" | "pattern";
+export type Track = "foundation" | "pattern" | "javascript";
 export type ProgressStatus = "unsolved" | "attempted" | "solved";
 export type MaangTag = "Google" | "Amazon" | "Apple" | "Netflix" | "Meta";
+export type SystemDesignCategory = "frontend" | "backend";
 
 export interface TestCase {
   input?: unknown[];
@@ -48,6 +49,22 @@ export interface Topic {
   whyItMatters: string;
   order: number;
   problemSlugs: string[];
+}
+
+export interface SystemDesignQuestion {
+  slug: string;
+  title: string;
+  category: SystemDesignCategory;
+  difficulty: Difficulty;
+  maangTags: MaangTag[];
+  order: number;
+  summary: string;
+  requirementsMarkdown: string;
+  highLevelDesignMarkdown: string;
+  deepDivesMarkdown: string;
+  tradeoffsMarkdown: string;
+  realWorldExamplesMarkdown: string;
+  relatedSlugs?: string[];
 }
 
 export interface TestResult {

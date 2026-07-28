@@ -102,7 +102,7 @@ export function Dashboard({ progressByProblem }: DashboardProps) {
         </div>
       </section>
 
-      <section>
+      <section className="mb-10">
         <h2 className="mb-4 text-xl font-semibold">Pattern Track</h2>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {patternTopics.map((topic) => (
@@ -114,6 +114,27 @@ export function Dashboard({ progressByProblem }: DashboardProps) {
           ))}
         </div>
       </section>
+
+      <Link
+        href="/system-design"
+        className="group flex items-center justify-between rounded-2xl border border-violet-200 bg-violet-50 p-5 transition hover:border-violet-300 hover:shadow-md dark:border-violet-900/40 dark:bg-violet-950/20"
+      >
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wide text-violet-600 dark:text-violet-400">
+            New Track
+          </p>
+          <h3 className="mt-1 text-lg font-semibold group-hover:text-violet-700 dark:group-hover:text-violet-300">
+            System Design (Frontend &amp; Backend)
+          </h3>
+          <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+            Requirements, high-level design, deep dives, and trade-offs for
+            MAANG-style system design interviews.
+          </p>
+        </div>
+        <span className="text-violet-600 transition group-hover:translate-x-1 dark:text-violet-400">
+          &rarr;
+        </span>
+      </Link>
     </div>
   );
 }
