@@ -1,4 +1,5 @@
 import { arrayProblems } from "./problems/arrays";
+import { backtrackingProblems } from "./problems/backtracking";
 import { binarySearchProblems } from "./problems/binary-search";
 import { graphProblems } from "./problems/graphs";
 import { heapProblems } from "./problems/heaps";
@@ -6,6 +7,7 @@ import { linkedListProblems } from "./problems/linked-lists";
 import { slidingWindowProblems } from "./problems/sliding-window";
 import { stackProblems } from "./problems/stack";
 import { treeProblems } from "./problems/trees";
+import { trieProblems } from "./problems/tries";
 import { twoPointerProblems } from "./problems/two-pointers";
 import { topics } from "./topics";
 import type { Problem, Topic } from "./types";
@@ -23,6 +25,8 @@ const allProblems: Problem[] = [
   ...treeProblems,
   ...heapProblems,
   ...graphProblems,
+  ...backtrackingProblems,
+  ...trieProblems,
 ];
 
 const problemMap = new Map(allProblems.map((problem) => [problem.slug, problem]));

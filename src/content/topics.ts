@@ -166,6 +166,40 @@ export const topics: Topic[] = [
       "word-ladder",
     ],
   },
+  {
+    slug: "backtracking",
+    title: "Backtracking",
+    track: "pattern",
+    order: 10,
+    description:
+      "Exhaustive search over decision trees, with pruning: subsets, combinations, permutations, and constraint-satisfaction placement. Explore, recurse, and undo — the discipline behind every 'generate all valid X' problem.",
+    whyItMatters:
+      "Backtracking is where interviews test whether a candidate can define a decision tree precisely — what's a node, what's a branch, when to prune — and then implement the mark/recurse/unmark discipline without leaking state between branches. Amazon, Google, and Apple all use it to separate 'can write a recursive function' from 'can reason about an exponential search space and prune it intelligently.'",
+    problemSlugs: [
+      "subsets",
+      "combination-sum",
+      "permutations",
+      "subsets-ii",
+      "word-search",
+      "palindrome-partitioning",
+      "n-queens-ii",
+    ],
+  },
+  {
+    slug: "tries",
+    title: "Tries",
+    track: "pattern",
+    order: 11,
+    description:
+      "Prefix trees for fast string/prefix lookups, wildcard search, and dictionary-backed grid search. A specialized tree shape purpose-built for 'share common prefixes, query fast.'",
+    whyItMatters:
+      "Tries are the structure behind every autocomplete box and spell-checker, and interviews use them to test whether a candidate recognizes 'many strings, prefix-heavy queries' as a distinct signal from 'use a hash set.' Word Search II combines this topic with Backtracking's grid DFS, making it a favorite hard-tier filter at Google and Amazon.",
+    problemSlugs: [
+      "implement-trie-prefix-tree",
+      "design-add-and-search-words-data-structure",
+      "word-search-ii",
+    ],
+  },
 ];
 
 export const foundationTopics = topics
